@@ -1,18 +1,40 @@
 #include "User.h"
-
 User::User() {
 	username = "";
 	password = "";
+	full_name = "";
 	isAdmin = 0;
 }
 
-User::User(std::string _username, std::string _password, std::string _full_name, std::vector < std::string> &_genres , bool _isAdmin)
+User::User(std::string _username, std::string _password, std::string _full_name,Date _birth, std::vector < std::string> &_genres , bool _isAdmin)
 {
 	username = _username;
 	password = _password;
 	full_name = _full_name;
 	fav_genres = _genres;
 	isAdmin = _isAdmin;
+	date_of_birth = _birth;
+}
+
+User::User(const User& u)
+{
+	username = u.username;
+	password = u.password;
+	full_name = u.full_name;
+	isAdmin = u.isAdmin;
+	fav_genres = u.fav_genres;
+	date_of_birth = u.date_of_birth;
+}
+
+
+
+User::User(std::string _username, std::string _password, std::string _full_name, Date _birth, bool _isAdmin)
+{
+	username = _username;
+	password = _password;
+	full_name = _full_name;
+	isAdmin = _isAdmin;
+	date_of_birth = _birth;
 }
 
 void User::operator=(const User& u)
@@ -62,6 +84,12 @@ void User::setFavGenres(std::vector<std::string>& _genres)
 	fav_genres = _genres;
 }
 
+void User::setDateOfBirth(Date &d)
+{
+	date_of_birth = d;
+}
+
+
 int User::getIsAdmin() const
 {
 	return isAdmin;
@@ -73,11 +101,50 @@ bool User::comparePasswords(std::string salt)
 	return false;
 }
 
-bool User::setVote(std::string _song_name, double _rating)
+ObjectResponse<double> User::setVote(std::string _song_name, double _rating)
 {
-	votes.insert(std::make_pair(_song_name, _rating));
+	try {
+		if (votes.find(_song_name) != votes.end()) {
+			double old_vote = votes[_song_name];
+			votes[_song_name] = _rating;
+			return ObjectResponse<double>(201, "Rating edited",old_vote);
+		}
+		votes.insert(std::make_pair(_song_name, _rating));
+		return ObjectResponse<double>(202, "Rating added",0);
+	}
+	catch (...) {
+		return ObjectResponse<double>(400, "Could not set vote",0);
+	}
 }
 
 bool User::isUserAdmin() {
 	return isAdmin;
+}
+
+Response User::addFavGenre(std::string genre)
+{
+		for (int i = 0; i < fav_genres.size(); i++) {
+			if (fav_genres[i] == genre) {
+				return Response(400, "Genre has already been added");
+			}
+		}
+		fav_genres.push_back(genre);
+		return Response(200, "Genre added to favourites");
+}
+
+
+Response User::removeFavGenre(std::string genre) {
+	try {
+		if (!std::count(fav_genres.begin(), fav_genres.end(), genre))return Response(404, "Genre not in favourites");
+		fav_genres.erase(std::remove(fav_genres.begin(), fav_genres.end(), genre), fav_genres.end());
+		return Response(200, "Genre removed from favourites");
+	}
+	catch (...) {
+		return Response(400, "Error removing genre from favourites");
+	}
+}
+
+Date User::getBirthDate() const
+{
+	return date_of_birth;
 }

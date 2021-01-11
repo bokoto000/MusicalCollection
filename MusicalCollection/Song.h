@@ -10,14 +10,23 @@ private:
 	std::string singer;
 	std::string genre;
 	std::string album;
+	int id;
 	int year;
 	double sum_ratings;
-	double num_votes;
+	int num_votes;
 	double rating;
 public:
 	Song();
-	Song(std::string, std::string, std::string , std::string, int, double);
+	Song(std::string, std::string, std::string, std::string, int);
+	Song(std::string, std::string, std::string, std::string, int, double, int);
 	double getRating() const;
+	std::string getName() const;
+	std::string getSinger() const;
+	std::string getGenre() const;
+	std::string getAlbum() const;
+	int getYear() const;
+	double getSumRatings()const;
+	int getNumVotes()const;
 	void addVote(double vote);
 	void editVote(double old_vote, double vote);
 };

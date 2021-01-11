@@ -1,0 +1,6 @@
+Users data
+admincho admin 1
+Adminski
+1 2 2000
+pop
+-1

@@ -139,15 +139,33 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Application.cpp" />
+    <ClCompile Include="Database.cpp" />
     <ClCompile Include="Date.cpp" />
+    <ClCompile Include="Helper.cpp" />
     <ClCompile Include="MusicalCollection.cpp" />
+    <ClCompile Include="ObjectResponse.cpp" />
+    <ClCompile Include="Response.cpp" />
     <ClCompile Include="Song.cpp" />
+    <ClCompile Include="SongApp.cpp" />
+    <ClCompile Include="SongTable.cpp" />
     <ClCompile Include="User.cpp" />
+    <ClCompile Include="UserApp.cpp" />
+    <ClCompile Include="UserTable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Application.h" />
+    <ClInclude Include="Database.h" />
     <ClInclude Include="Date.h" />
+    <ClInclude Include="Helper.h" />
+    <ClInclude Include="ObjectResponse.h" />
+    <ClInclude Include="Response.h" />
     <ClInclude Include="Song.h" />
+    <ClInclude Include="SongApp.h" />
+    <ClInclude Include="SongTable.h" />
     <ClInclude Include="User.h" />
+    <ClInclude Include="UserApp.h" />
+    <ClInclude Include="UserTable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

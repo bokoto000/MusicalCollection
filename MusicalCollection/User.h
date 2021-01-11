@@ -4,6 +4,9 @@
 #include<string>
 #include <vector>
 #include <unordered_map>
+#include "Date.h"
+#include "Response.h"
+#include "ObjectResponse.h"
 
 class User
 {
@@ -13,10 +16,13 @@ private:
 	std::string password;
 	std::vector < std::string> fav_genres;
 	std::unordered_map<std::string, double> votes;
+	Date date_of_birth;
 	bool isAdmin;
 public:
 	User();
-	User(std::string , std::string, std::string ,std::vector<std::string>&, bool);
+	User(std::string, std::string, std::string, Date, std::vector<std::string>&, bool);
+	User(const User& u);
+	User(std::string, std::string, std::string, Date, bool);
 	void operator=(const User&);
 	std::string getUsername()const;
 	std::string getPassword()const;
@@ -27,9 +33,13 @@ public:
 	void setFullname(std::string);
 	void setFavGenres(std::vector<std::string>&);
 	bool comparePasswords(std::string);
-	bool setVote(std::string, double);
+	ObjectResponse<double> setVote(std::string, double);
 	int getIsAdmin() const;
+	Response addFavGenre(std::string);
+	Response removeFavGenre(std::string);
 	bool isUserAdmin();
+	void setDateOfBirth(Date&);
+	Date getBirthDate() const;
 };
 
 #endif
