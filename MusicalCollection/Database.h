@@ -7,6 +7,7 @@
 #include<iostream>
 #include<fstream>
 #include "SongTable.h"
+#include "PlaylistTable.h"
 
 class Database
 {
@@ -17,9 +18,13 @@ private:
 
 	std::string songsPath;
 	std::string songsHeader;
+
+	std::string  playlistsPath;
+	std::string playlistsHeader;
 public:
 	UserTable usersTable;
 	SongTable songsTable;
+	PlaylistTable playlistsTable;
 	Database();
 	Response load();
 	Response readFile();

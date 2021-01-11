@@ -1,1 +1,18 @@
 Users data
+admincho admin 1
+Adminski
+1 2 2000
+popfolk
+-1
+admin admin 1
+Adminski
+1 2 2000
+popfolk Popfolk Rock
+Da da da!
+10
+-1
+admin1 admin1 0
+Admin ADminski
+12 5 2000
+
+-1

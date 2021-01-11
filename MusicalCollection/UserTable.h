@@ -18,7 +18,7 @@ private:
 public:
 	Response load(std::string,std::string);
 	ObjectResponse<User*> getUser(std::string);
-	Response add(std::string, std::string, std::string, Date, std::vector<std::string>&, bool)/* adds user  */;
+	Response add(std::string, std::string, std::string, Date, std::vector<std::string>&,std::unordered_map<std::string,double>&, bool)/* adds user  */;
 	Response addWithoutGenres(std::string, std::string, std::string, Date, bool)/* adds user  */;
 	Response addFavGenre(std::string, std::string);
 	Response removeFavGenre(std::string, std::string);

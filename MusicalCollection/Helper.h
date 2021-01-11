@@ -3,7 +3,6 @@
 #include<vector>
 #include<string>
 #include "User.h"
-
 namespace helper {
 
 	std::vector<std::string> splitString(std::string s);/*split string into a vector of strings*/

@@ -5,15 +5,16 @@
 #include "User.h"
 #include "UserApp.h"
 #include "SongApp.h"
+#include "PlaylistApp.h"
 
 class Application
 {
 private:
 	Database *db;
-	User* user;
 public:
 	UserApp users;
 	SongApp songs;
+	PlaylistApp playlists;
 	Application();
 	Application(Database &);
 	Response logIn(std::string, std::string);

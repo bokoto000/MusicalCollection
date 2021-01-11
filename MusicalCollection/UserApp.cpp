@@ -6,37 +6,37 @@ UserApp::UserApp()
 	user = nullptr;
 }
 
-UserApp::UserApp(Database* _db, User *_user)
+UserApp::UserApp(Database* _db)
 {
 	db = _db;
-	user =_user;
+	user = nullptr;
 }
 
-Response UserApp::logIn(std::string _username, std::string _password)
+ObjectResponse<User*> UserApp::logIn(std::string _username, std::string _password)
 {
 	ObjectResponse<User*> userRes = db->usersTable.getUser(_username);
-	if (!userRes) return Response(400, "User not found");
+	if (!userRes) return ObjectResponse<User*>(400, "User not found",nullptr);
 	if (userRes.object->comparePasswords(_password)) {
 		user = userRes.object;
-		return Response(200, "Login successful");
+		std::cout << user->getUsername() << std::endl;
+		return ObjectResponse<User*>(200, "Login successful",user);
 	}
 	else {
-		return Response(400, "Login  unsuccessful");
+		return ObjectResponse<User*>(400, "Login  unsuccessful",nullptr);
 	}
 }
 
 Response UserApp::logout()
 {
 	user = nullptr;
-	return Response(200, "OK");
+	return Response(200, "Logout succesful");
 }
 
 Response UserApp::addFavGenre( std::string genre)
 {
 	if (!helper::requireUser(user)) return helper::requireUser(user);
 	try {
-		db->usersTable.addFavGenre(user->getUsername(), genre);
-		return Response(200, "OK");
+		return db->usersTable.addFavGenre(user->getUsername(), genre);
 	}
 	catch (std::string err) {
 		return Response(400, err);
@@ -51,9 +51,8 @@ Response UserApp::removeFavGenre( std::string genre)
 
 Response UserApp::addUser(std::string username, std::string password, std::string full_name, Date birth, bool isAdmin)
 {
-	if (db->usersTable.addWithoutGenres(username, password, full_name, birth, isAdmin)) std::cout << "User added" << std::endl;
+	if (db->usersTable.addWithoutGenres(username, password, full_name, birth, isAdmin)) return Response(200, "User was created");
 	else return Response(400, "User was not added!");
-	return Response(200, "OK");
 }
 
 Response UserApp::setUsername(std::string newUsername)
@@ -81,6 +80,11 @@ Response UserApp::setDate(Date &date)
 {
 	if (!helper::requireUser(user)) return helper::requireUser(user);
 	return db->usersTable.changeDate(user->getUsername(), date);
+}
+
+ObjectResponse<User*> UserApp::getLoggedUser()
+{
+	return ObjectResponse<User*>(200, "OK", user);
 }
 
 Response UserApp::setVote(std::string song_name, double rating)

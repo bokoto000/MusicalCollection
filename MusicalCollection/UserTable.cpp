@@ -8,6 +8,8 @@ Response UserTable::load(std::string _usersPath, std::string _usersHeader)
 	std::string username;
 	std::string password;
 	std::string full_name;
+	std::string song_name;
+	double rating;
 	int isAdmin;
 	Date birth_date;
 	usersDb.open(_usersPath);
@@ -18,6 +20,8 @@ Response UserTable::load(std::string _usersPath, std::string _usersHeader)
 			if (line != _usersHeader)throw("Corrupted User File");
 			for (int i = 0; std::getline(usersDb, line); i++)
 			{
+				std::vector<std::string> fav_genres;
+				std::unordered_map<std::string, double> votes;
 				args = helper::splitString(line);
 				username = args.at(0);
 				password = args.at(1);
@@ -27,17 +31,16 @@ Response UserTable::load(std::string _usersPath, std::string _usersHeader)
 				args = helper::splitString(line);
 				birth_date = Date(std::stoi(args.at(0)), std::stoi(args.at(1)), std::stoi(args.at(2)));
 				std::getline(usersDb, line);
-				args = helper::splitString(line);
-				if (args.size() == 0) {
-					addWithoutGenres(username, password, full_name, birth_date, isAdmin);
+				fav_genres = helper::splitString(line);
+				for (; ;) {
+					std::getline(usersDb, song_name);
+					if (song_name == "-1")break;
+					std::getline(usersDb, line);
+					rating = std::stod(line);
+					votes.insert(std::make_pair(song_name,rating));
 				}
-				else {
-					add(username, password, full_name, birth_date, args, isAdmin);
-				}
-				std::getline(usersDb, line);
-				if (line != "-1") {
-					throw("Unexpected character in user file");
-				}
+				add(username, password, full_name, birth_date, fav_genres, votes, isAdmin);
+
 			}
 		}
 		catch (std::string err) {
@@ -65,12 +68,12 @@ ObjectResponse<User*> UserTable::getUser(std::string username)
 	return ObjectResponse<User*>(200, "OK", result);
 }
 
-Response UserTable::add(std::string _username, std::string password, std::string _full_name, Date birth, std::vector < std::string>& _genres, bool isAdmin)
+Response UserTable::add(std::string _username, std::string password, std::string _full_name, Date birth, std::vector < std::string>& _genres, std::unordered_map < std::string ,double>& votes, bool isAdmin)
 {
 	ObjectResponse<User*> res = getUser(_username);
 	if (res)
 		return Response(400, "Username taken");
-	users.insert(std::make_pair(_username, User(_username, password, _full_name, birth, _genres, isAdmin)));
+	users.insert(std::make_pair(_username, User(_username, password, _full_name, birth, _genres, votes, isAdmin)));
 	return Response(200, "OK");
 }
 
@@ -177,6 +180,10 @@ Response UserTable::save(std::string usersPath, std::string usersHeader)
 			if (it.second.getFavGenres().size() > 0)usersDb << it.second.getFavGenres()[0];
 			for (int i = 1; i < it.second.getFavGenres().size(); i++) {
 				usersDb << " " << it.second.getFavGenres()[i];
+			}
+			std::unordered_map<std::string, double> votes = it.second.getVotes();
+			for (auto jt =votes.begin(); jt != votes.end(); jt++) {
+				usersDb <<std::endl<< (jt->first)<<std::endl<<(jt->second);
 			}
 			usersDb << std::endl << -1;
 		}

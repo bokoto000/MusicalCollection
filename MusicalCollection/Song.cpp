@@ -32,9 +32,23 @@ Song::Song(std::string _name, std::string _singer, std::string _genre, std::stri
 	num_votes = _num_votes;
 }
 
+Song::Song(const Song& s)
+{
+	name = s.name;
+	singer = s.singer;
+	genre = s.genre;
+	album = s.album;
+	id = s.id;
+	year = s.year;
+	sum_ratings = s.sum_ratings;
+	num_votes = s.num_votes;
+	rating = s.rating;
+}
+
 double Song::getRating() const
 {
-	return rating;
+	if (num_votes == 0)return 0;
+	return sum_ratings/num_votes;
 }
 
 std::string Song::getName() const
@@ -81,4 +95,12 @@ void Song::editVote(double old_vote, double new_vote)
 	sum_ratings -= old_vote;
 	sum_ratings += new_vote;
 	rating = sum_ratings / num_votes;
+}
+
+bool Song::includesGenre(std::vector<std::string> genres)
+{
+	for (int i = 0; i < genres.size(); i++) {
+		if (genre == genres[i]) return true;
+	}
+	return false;
 }

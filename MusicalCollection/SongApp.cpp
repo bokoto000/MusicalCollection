@@ -4,12 +4,14 @@ SongApp::SongApp()
 {
 	db = nullptr;
 	user = nullptr;
+	usersApp = nullptr;
 }
 
-SongApp::SongApp(Database* _db, User* _user)
+SongApp::SongApp(Database* _db, UserApp* _userApp)
 {
+	user = nullptr;
 	db = _db;
-	user = _user;
+	usersApp = _userApp;
 }
 
 void SongApp::setDb(Database *_db)
@@ -25,8 +27,9 @@ Response SongApp::addSong(std::string name, std::string singer, std::string genr
 
 Response SongApp::vote(std::string song_name,  double rating)
 {
-	Response res = helper::requireUser(user);
-	if (!helper::requireUser(user)) return res;
+	Response res = helper::requireUser(usersApp->getLoggedUser().object);
+	if (!res) return res;
+	User* user= usersApp->getLoggedUser().object;
 	ObjectResponse<double> resUser = user->setVote(song_name, rating);
 	if (resUser) {
 		if (resUser.getCode() == 201) {

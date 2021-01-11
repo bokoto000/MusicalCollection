@@ -140,11 +140,16 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp" />
+    <ClCompile Include="CommandLine.cpp" />
     <ClCompile Include="Database.cpp" />
     <ClCompile Include="Date.cpp" />
     <ClCompile Include="Helper.cpp" />
     <ClCompile Include="MusicalCollection.cpp" />
     <ClCompile Include="ObjectResponse.cpp" />
+    <ClCompile Include="Playlist.cpp" />
+    <ClCompile Include="PlaylistApp.cpp" />
+    <ClCompile Include="PlaylistTable.cpp" />
+    <ClCompile Include="PlaylistWithSongs.cpp" />
     <ClCompile Include="Response.cpp" />
     <ClCompile Include="Song.cpp" />
     <ClCompile Include="SongApp.cpp" />
@@ -155,10 +160,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Application.h" />
+    <ClInclude Include="CommandLine.h" />
     <ClInclude Include="Database.h" />
     <ClInclude Include="Date.h" />
     <ClInclude Include="Helper.h" />
     <ClInclude Include="ObjectResponse.h" />
+    <ClInclude Include="Playlist.h" />
+    <ClInclude Include="PlaylistApp.h" />
+    <ClInclude Include="PlaylistTable.h" />
+    <ClInclude Include="PlaylistWithSongs.h" />
     <ClInclude Include="Response.h" />
     <ClInclude Include="Song.h" />
     <ClInclude Include="SongApp.h" />

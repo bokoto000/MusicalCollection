@@ -21,6 +21,8 @@ public:
 	Response save(std::string ,std::string);
 	Response addVote(std::string name, double rating);
 	Response editVote(std::string name,double oldrating, double rating);
+	ObjectResponse<int> getSongId(std::string name);
+	ObjectResponse<std::vector<Song> *> getAllSongs();
 	//Response remove(std::string);
 	Response load(std::ifstream& database);
 };

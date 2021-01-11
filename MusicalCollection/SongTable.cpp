@@ -122,3 +122,17 @@ Response SongTable::editVote(std::string name,double oldvote, double rating)
 	}
 	return Response(400, "Song not found");
 }
+
+ObjectResponse<int> SongTable::getSongId(std::string name)
+{
+	for (int i = 0; i < songs.size(); i++) {
+		if (songs[i].getName() == name)
+			return ObjectResponse<int>(200, "Ok", i);
+	}
+	return ObjectResponse<int>(400, "Song not found",-1);
+}
+
+ObjectResponse<std::vector<Song>* > SongTable::getAllSongs()
+{
+	return ObjectResponse<std::vector<Song>*>(200,"OK",&songs);
+}

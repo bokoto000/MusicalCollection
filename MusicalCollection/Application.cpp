@@ -3,30 +3,25 @@
 Application::Application()
 {
 	db = nullptr;
-	user = nullptr;
-	UserApp();
-	SongApp();
 }
 
 Application::Application(Database &_db)
 {
 	db = &_db;
-	user = nullptr;
-	UserApp(db, user);
-	SongApp(db, user);
+	users = UserApp(db);
+	songs = SongApp(db, &users);
+	playlists = PlaylistApp(db, &users);
 }
 
+/*
 Response Application::logIn(std::string _username, std::string _password)
 {
-	ObjectResponse<User*> userRes = db->usersTable.getUser(_username);
-	if (!userRes) return userRes;
-	if (userRes.object->comparePasswords(_password)) {
-		user = userRes.object;
-		return Response(200, "Login successful");
+	ObjectResponse<User*> res = users.logIn(_username, _password);
+	if (res) {
+		user = &res.object;
+		return Response(400, res.getMessage());
 	}
-	else {
-		return Response(400, "Login  unsuccessful");
-	}
+	else return Response(400, res.getMessage());
 }
 
 Response Application::logout()
@@ -38,7 +33,7 @@ Response Application::logout()
 Response Application::requireAdmin()
 {
 	if (!requireUser().isSuccessful()) return Response(400,"No user");
-	if (requireUser().isSuccessful() && user->isUserAdmin() == true) return Response(200,"OK");
+	if (requireUser().isSuccessful() && (*user)->isUserAdmin() == true) return Response(200,"OK");
 	return Response(400,"No permission");
 }
 
@@ -55,12 +50,13 @@ Response Application::addUser(std::string username, std::string password, std::s
 	else return Response(400, "User was not added!");
 	return Response(200,"OK");
 }
-
+*/
 void Application::setDb(Database *_db)
 {
 	db = _db;
 	users.setDb(_db);
 	songs.setDb(_db);
+	playlists.setDb(_db);
 }
 
 Response Application::close()

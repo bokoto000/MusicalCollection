@@ -6,14 +6,19 @@ Database::Database()
 	usersHeader = "Users data";
 	songsPath = "songs.txt";
 	songsHeader = "Songs data";
+	playlistsPath = "playlists.txt";
+	playlistsHeader = "Playlists Data";
 	if (!fileExists(usersPath.c_str())) {
 		createEmptyFile(usersPath, usersHeader);
 	} 
 	if (!fileExists(songsPath.c_str())) {
 		createEmptyFile(songsPath, songsHeader);
 	}
+	if (!fileExists(playlistsPath.c_str())) {
+		createEmptyFile(playlistsPath, playlistsHeader);
+	}
 	Response res = load();
-	if (!res)throw(res.getMessage());
+	if (!res)std::cout<<res.getMessage()<<std::endl;
 }
 
 Response Database::load()
@@ -22,6 +27,8 @@ Response Database::load()
 		Response res = usersTable.load(usersPath, usersHeader);
 		if (!res) return res;
 		res = songsTable.load(songsPath, songsHeader);
+		if (!res) return res;
+		res = playlistsTable.load(playlistsPath, playlistsHeader);
 		if (!res) return res;
 		return Response(200, "OK");
 	}
@@ -42,6 +49,8 @@ Response Database::save()
 		Response res = usersTable.save(usersPath, usersHeader);
 		if (!res)throw(res.getMessage());
 		res = songsTable.save(songsPath, songsHeader);
+		if (!res)throw(res.getMessage());
+		res = playlistsTable.save(playlistsPath, playlistsHeader);
 		if (!res)throw(res.getMessage());
 		return Response(200, "OK");
 	}

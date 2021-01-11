@@ -1,4 +1,5 @@
 #include "User.h"
+#include <iostream>
 User::User() {
 	username = "";
 	password = "";
@@ -6,7 +7,7 @@ User::User() {
 	isAdmin = 0;
 }
 
-User::User(std::string _username, std::string _password, std::string _full_name,Date _birth, std::vector < std::string> &_genres , bool _isAdmin)
+User::User(std::string _username, std::string _password, std::string _full_name, Date _birth, std::vector < std::string>& _genres, bool _isAdmin)
 {
 	username = _username;
 	password = _password;
@@ -14,6 +15,19 @@ User::User(std::string _username, std::string _password, std::string _full_name,
 	fav_genres = _genres;
 	isAdmin = _isAdmin;
 	date_of_birth = _birth;
+}
+
+
+
+User::User(std::string _username, std::string _password, std::string _full_name, Date _birth, std::vector < std::string>& _genres, std::unordered_map<std::string, double>& _votes, bool _isAdmin)
+{
+	username = _username;
+	password = _password;
+	full_name = _full_name;
+	fav_genres = _genres;
+	isAdmin = _isAdmin;
+	date_of_birth = _birth;
+	votes = _votes;
 }
 
 User::User(const User& u)
@@ -24,6 +38,7 @@ User::User(const User& u)
 	isAdmin = u.isAdmin;
 	fav_genres = u.fav_genres;
 	date_of_birth = u.date_of_birth;
+	votes = u.votes;
 }
 
 
@@ -64,6 +79,11 @@ std::vector<std::string> User::getFavGenres() const
 	return fav_genres;
 }
 
+std::unordered_map<std::string, double> User::getVotes() const
+{
+	return votes;
+}
+
 void User::setUsername(std::string _username)
 {
 	username = _username;
@@ -84,7 +104,7 @@ void User::setFavGenres(std::vector<std::string>& _genres)
 	fav_genres = _genres;
 }
 
-void User::setDateOfBirth(Date &d)
+void User::setDateOfBirth(Date& d)
 {
 	date_of_birth = d;
 }
@@ -107,13 +127,15 @@ ObjectResponse<double> User::setVote(std::string _song_name, double _rating)
 		if (votes.find(_song_name) != votes.end()) {
 			double old_vote = votes[_song_name];
 			votes[_song_name] = _rating;
-			return ObjectResponse<double>(201, "Rating edited",old_vote);
+			return ObjectResponse<double>(201, "Rating edited", old_vote);
 		}
-		votes.insert(std::make_pair(_song_name, _rating));
-		return ObjectResponse<double>(202, "Rating added",0);
+		else {
+			votes.insert(std::make_pair(_song_name, _rating));
+			return ObjectResponse<double>(202, "Rating added", 0);
+		}
 	}
 	catch (...) {
-		return ObjectResponse<double>(400, "Could not set vote",0);
+		return ObjectResponse<double>(400, "Could not set vote", 0);
 	}
 }
 
@@ -123,13 +145,13 @@ bool User::isUserAdmin() {
 
 Response User::addFavGenre(std::string genre)
 {
-		for (int i = 0; i < fav_genres.size(); i++) {
-			if (fav_genres[i] == genre) {
-				return Response(400, "Genre has already been added");
-			}
+	for (int i = 0; i < fav_genres.size(); i++) {
+		if (fav_genres[i] == genre) {
+			return Response(400, "Genre has already been added");
 		}
-		fav_genres.push_back(genre);
-		return Response(200, "Genre added to favourites");
+	}
+	fav_genres.push_back(genre);
+	return Response(200, "Genre added to favourites");
 }
 
 

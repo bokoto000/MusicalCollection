@@ -11,8 +11,8 @@ private:
 	User* user;
 public:
 	UserApp();
-	UserApp(Database *, User *);
-	Response logIn(std::string, std::string);
+	UserApp(Database *);
+	ObjectResponse<User*> logIn(std::string, std::string);
 	Response logout(); /* logout by setting the user pointer to null*/
 	Response addFavGenre(std::string);
 	Response removeFavGenre( std::string);
@@ -21,6 +21,7 @@ public:
 	Response setPassword(std::string);
 	Response setFullname(std::string);
 	Response setDate(Date &);
+	ObjectResponse<User*> getLoggedUser();
 	Response setVote(std::string, double rating);
 	void setDb(Database* db);
 };

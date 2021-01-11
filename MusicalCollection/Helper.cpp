@@ -4,7 +4,7 @@
 #include <string>
 #include <iterator>
 #include <sstream>
-#include "Response.h"
+#include "UserApp.h"
 
 namespace helper {
 	std::vector<std::string> splitString(std::string s) {
@@ -45,5 +45,11 @@ namespace helper {
 		if (user != nullptr) return Response(200, "OK");
 		return Response(403, "User not logged in!");
 	}
+	/*
+	Response requireUserFromApp(UserApp *userApp) {
+		if (userApp->getLoggedUser().object != nullptr) return Response(200, "OK");
+		return Response(403, "User not logged in!");
+	}
+	*/
 }
 

@@ -6,6 +6,8 @@
 #include "User.h"
 #include "Database.h"
 #include "Application.h"
+#include "Playlist.h"
+#include "CommandLine.h"
 
 int main()
 {
@@ -18,12 +20,16 @@ int main()
         if (Date::isDateValid(29, 2, 3))throw ("Unsuccessful test");
         if (Date::isDateValid(32, 1, 2021))throw ("Unsuccessful test");
         std::cout << "--------Passes date tests----------" << std::endl;
+
+
         if(!Response(200,"OK"))throw ("Unsuccessful response");
         app.setDb(&db);
         Response res = app.users.addUser("admin", "admin", "Adminski",Date(1,2,2000), 1);
-        if (!res)throw (res.getMessage());
+        std::cout << res.getMessage() << std::endl;
+        //if (!res)throw (res.getMessage());
         res = app.users.addUser("admin", "admin", "Adminski", Date(1, 2, 2000), 1);
-        if (res)throw (res.getMessage());
+        std::cout << res.getMessage() << std::endl;
+        //if (res)throw (res.getMessage());
         res = app.users.addFavGenre( "pop");
         if (res) throw(res.getMessage());
         std::cout << app.users.logIn("admin", "admin").getMessage() << std::endl;
@@ -34,15 +40,26 @@ int main()
         res = app.users.addFavGenre("popfolk");
         if (!res) throw(res.getMessage());
         res = app.users.setUsername("admincho");
-        if (!res) throw(res.getMessage());
+        std::cout << res.getMessage() << std::endl;
+        //if (!res) throw(res.getMessage());
         std::cout << "------Passed users test--------" << std::endl;
+
+
         std::cout << "------Starting Songs Test--------" << std::endl;
         res = app.songs.addSong("Da da da!", "Planeta", "Pop", "Planeta", 2021);
+        res = app.songs.addSong("Da da da!2", "Planeta", "Pop", "Planeta", 2021);
         std::cout << res.getMessage() << std::endl;
-        if (!res)throw(res.getMessage());
+        //if (!res)throw(res.getMessage());
         res = app.songs.vote("Da da da!", 10);
         if (!res)throw(res.getMessage());
+        Playlist testPlaylist = Playlist("test", { 1,2,3,4 });
+        Song songa = Song("Da da da!", "Planeta", "Pop", "Planeta", 2021);
+        Song songb = Song("Da da da!2", "Planeta", "Pop", "Planeta", 2021);
+        res = app.playlists.addPlaylist("Da da da compilation!",PlaylistWithSongs("Planeta", { songa,songb }));
+        std::cout << res.getMessage() << std::endl;
         app.close();
+
+        std::cout << "------Passed all tests--------" << std::endl;
 
     }
     catch (std::string err) {
@@ -51,6 +68,9 @@ int main()
         std::cout << "Error: " << err << std::endl;
         app.close();
     }
+
+    CommandLine cmd = CommandLine(&app);
+    cmd.start();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu
